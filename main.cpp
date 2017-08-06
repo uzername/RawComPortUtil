@@ -2,6 +2,7 @@
 #include <cstdio>
 #include <memory>
 #include "tty.h"
+#include "ModBusHandler.h"
 using namespace std;
 int main(int argc, char** argv) {
     printf("===COM PORT WINDOWS UTIL===\n");
@@ -12,9 +13,12 @@ int main(int argc, char** argv) {
     int totalSymbols = scanf("%99[^\n]", portName);
     if (totalSymbols == 0) {return 0;}
     string* portnameString = new string(portName, strlen(portName) );
-    printf("%s %s", "Your line: ", portnameString->c_str() );
+    ModBusHandler* processModbus;
+    //printf("%s %s", "Your line: ", portnameString->c_str() );
     try {
-    COMportInstance->Connect(portnameString,9600, 8, 1, NONE);
+        COMportInstance->Connect(portnameString,9600, 8, 1, NONE);
+        processModbus = new ModBusHandler(COMportInstance);
+        printf("Connection OK. Modbus instance OK.");
     } catch (TTYException e) {
         printf("\n %s",e.exception_cause->c_str());
         COMportInstance->Disconnect();
