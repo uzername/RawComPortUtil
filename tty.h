@@ -26,7 +26,7 @@ public:
     virtual ~tty();
  	bool IsOK() const;	
         //TODO: define also handshaking. It is not used anyway.
- 	void Connect(const string& port, uint32_t baudrate, uint8_t dataBits, uint8_t stopBits, PARITY parityInstance);
+ 	void Connect(string* port, uint32_t baudrate, uint8_t dataBits, uint8_t stopBits, PARITY parityInstance);
  	void Disconnect();
  	virtual void Write(const vector<unsigned char>& data);
         virtual void WriteByte(const uint8_t singleByte);
@@ -37,9 +37,17 @@ private:
 
 };
 
-struct TTYException {
-    
- };
+class TTYException {
+public:
+    TTYException() {
+        exception_cause = new string();
+        exception_cause = new string("Unkonown Source");
+    }
+    string* exception_cause;
+    TTYException(string* expl) {
+        exception_cause = new string(*expl);
+    }
+};
 
 #endif /* TTY_H */
 

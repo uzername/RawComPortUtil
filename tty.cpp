@@ -1,6 +1,6 @@
 /* 
  * File:   tty.cpp
- * Author: some_name
+ * Author: some_name and wikipedia
  * operate with com port.
  * (1) https://ru.wikibooks.org/wiki/COM-%D0%BF%D0%BE%D1%80%D1%82_%D0%B2_Windows_(%D0%BF%D1%80%D0%BE%D0%B3%D1%80%D0%B0%D0%BC%D0%BC%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5)
  * (2) http://blablacode.ru/programmirovanie/392
@@ -8,6 +8,7 @@
  * (4) https://github.com/xanthium-enterprises/Serial-Programming-Win32API-C
  * (5) Configuring a Communications Resource: https://msdn.microsoft.com/en-us/library/windows/desktop/aa363201(v=vs.85).aspx
  * (6) Monitoring Communications Events: https://msdn.microsoft.com/en-us/library/windows/desktop/aa363424(v=vs.85).aspx
+ * (7) Com port naming: https://support.microsoft.com/en-us/help/115831/howto-specify-serial-ports-larger-than-com9
  * Created on 3 июля 2017 г., 16:22
  */
 
@@ -22,11 +23,11 @@ tty::tty() {
     m_Handle = INVALID_HANDLE_VALUE;
 }
 
-void tty::Connect(const string& port, uint32_t baudrate, uint8_t dataBits, uint8_t stopBits, PARITY parityInstance) {
+void tty::Connect(string* port, uint32_t baudrate, uint8_t dataBits, uint8_t stopBits, PARITY parityInstance) {
     Disconnect();
     
     m_Handle = CreateFile(
- 		port.c_str(),             // Name of the Port to be Opened
+ 		port->c_str(),             // Name of the Port to be Opened: Example: "\\\\.\\COM10"
  		GENERIC_READ | GENERIC_WRITE, // Read/Write Access
  		0,                            // No Sharing, ports cant be shared
  		NULL,                         // No Security
@@ -36,7 +37,11 @@ void tty::Connect(const string& port, uint32_t baudrate, uint8_t dataBits, uint8
  		NULL);                        //  hTemplate must be NULL for comm devices
     
             if(m_Handle == INVALID_HANDLE_VALUE) {
-                        throw TTYException();
+                
+                char errcode [30];
+                uint8_t lngth = sprintf(errcode, "Error opening port: %05d", GetLastError());
+                throw TTYException( new string(errcode, lngth) );
+                        
             }
         ////Configure Windows to Monitor the serial device for Character Reception
         SetCommMask(m_Handle, EV_RXCHAR);

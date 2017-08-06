@@ -7,21 +7,21 @@ CND_BASEDIR=`pwd`
 CND_BUILDDIR=build
 CND_DISTDIR=dist
 # Debug configuration
-CND_PLATFORM_Debug=MinGW-Windows
-CND_ARTIFACT_DIR_Debug=dist/Debug/MinGW-Windows
-CND_ARTIFACT_NAME_Debug=comport_sim5320e
-CND_ARTIFACT_PATH_Debug=dist/Debug/MinGW-Windows/comport_sim5320e
-CND_PACKAGE_DIR_Debug=dist/Debug/MinGW-Windows/package
-CND_PACKAGE_NAME_Debug=comportsim5320e.tar
-CND_PACKAGE_PATH_Debug=dist/Debug/MinGW-Windows/package/comportsim5320e.tar
+CND_PLATFORM_Debug=MinGW_5v3v0_QT-Windows
+CND_ARTIFACT_DIR_Debug=dist/Debug/MinGW_5v3v0_QT-Windows
+CND_ARTIFACT_NAME_Debug=rawcomportutil
+CND_ARTIFACT_PATH_Debug=dist/Debug/MinGW_5v3v0_QT-Windows/rawcomportutil
+CND_PACKAGE_DIR_Debug=dist/Debug/MinGW_5v3v0_QT-Windows/package
+CND_PACKAGE_NAME_Debug=rawcomportutil.tar
+CND_PACKAGE_PATH_Debug=dist/Debug/MinGW_5v3v0_QT-Windows/package/rawcomportutil.tar
 # Release configuration
-CND_PLATFORM_Release=MinGW-Windows
-CND_ARTIFACT_DIR_Release=dist/Release/MinGW-Windows
-CND_ARTIFACT_NAME_Release=comport_sim5320e
-CND_ARTIFACT_PATH_Release=dist/Release/MinGW-Windows/comport_sim5320e
-CND_PACKAGE_DIR_Release=dist/Release/MinGW-Windows/package
-CND_PACKAGE_NAME_Release=comportsim5320e.tar
-CND_PACKAGE_PATH_Release=dist/Release/MinGW-Windows/package/comportsim5320e.tar
+CND_PLATFORM_Release=MinGW_5v3v0_QT-Windows
+CND_ARTIFACT_DIR_Release=dist/Release/MinGW_5v3v0_QT-Windows
+CND_ARTIFACT_NAME_Release=rawcomportutil
+CND_ARTIFACT_PATH_Release=dist/Release/MinGW_5v3v0_QT-Windows/rawcomportutil
+CND_PACKAGE_DIR_Release=dist/Release/MinGW_5v3v0_QT-Windows/package
+CND_PACKAGE_NAME_Release=rawcomportutil.tar
+CND_PACKAGE_PATH_Release=dist/Release/MinGW_5v3v0_QT-Windows/package/rawcomportutil.tar
 #
 # include compiler specific variables
 #
