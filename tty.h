@@ -32,9 +32,10 @@ public:
         virtual void WriteByte(const uint8_t singleByte);
         virtual uint8_t ReadByte();
  	virtual void Read(vector<unsigned char>& data);	
+  virtual uint32_t GetStoredBaudrate();
  	HANDLE m_Handle;
 private:
-
+  uint32_t storedBaudrate;
 };
 
 class TTYException {
