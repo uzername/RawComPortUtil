@@ -136,6 +136,10 @@ void tty::Read(vector<unsigned char>& data) {
     
 }
 
+tty::uint32_t GetStoredBaudrate() {
+    return storedBaudrate;
+}
+
 tty::~tty() {
     Disconnect();
 }
