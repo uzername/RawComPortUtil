@@ -9,6 +9,7 @@
  * (5) Configuring a Communications Resource: https://msdn.microsoft.com/en-us/library/windows/desktop/aa363201(v=vs.85).aspx
  * (6) Monitoring Communications Events: https://msdn.microsoft.com/en-us/library/windows/desktop/aa363424(v=vs.85).aspx
  * (7) Com port naming: https://support.microsoft.com/en-us/help/115831/howto-specify-serial-ports-larger-than-com9
+ * (8) Multithreading on Com port (asynchronous, OVERLAPPED): https://msdn.microsoft.com/en-us/library/ff802693.aspx
  * Created on 3 июля 2017 г., 16:22
  */
 
@@ -32,7 +33,7 @@ void tty::Connect(string* port, uint32_t baudrate, uint8_t dataBits, uint8_t sto
  		0,                            // No Sharing, ports cant be shared
  		NULL,                         // No Security
  		OPEN_EXISTING,                // Open existing port only
- 		FILE_FLAG_OVERLAPPED,         // overlapped/nonoverlapped IO. might be worth setting to 0 (3)
+ 		FILE_ATTRIBUTE_NORMAL, /*FILE_FLAG_OVERLAPPED,*/         // overlapped/nonoverlapped IO. might be worth setting to 0 (3)
                                               // or FILE_ATTRIBUTE_NORMAL (see 1) or FILE_FLAG_OVERLAPPED (see 6)
  		NULL);                        //  hTemplate must be NULL for comm devices
     
@@ -52,18 +53,20 @@ void tty::Connect(string* port, uint32_t baudrate, uint8_t dataBits, uint8_t sto
         //see https://msdn.microsoft.com/ru-ru/library/windows/desktop/aa363190(v=vs.85).aspx
  	COMMTIMEOUTS CommTimeOuts;
             //The maximum time allowed to elapse before the arrival of the next byte on the communications line, in milliseconds.
+        
+        /*  //these settings may cause error
  	CommTimeOuts.ReadIntervalTimeout = 0xFFFFFFFF; 
  	CommTimeOuts.ReadTotalTimeoutMultiplier = 0;  
  	CommTimeOuts.ReadTotalTimeoutConstant = TIMEOUT; 
  	CommTimeOuts.WriteTotalTimeoutMultiplier = 0;
  	CommTimeOuts.WriteTotalTimeoutConstant = TIMEOUT;
-        /*
-        CommTimeOuts.ReadIntervalTimeout         = 50;
-	CommTimeOuts.ReadTotalTimeoutConstant    = 50;
-	CommTimeOuts.ReadTotalTimeoutMultiplier  = 10;
+         */
+        
+        CommTimeOuts.ReadIntervalTimeout         = 25;
+	CommTimeOuts.ReadTotalTimeoutConstant    = 25;
+	CommTimeOuts.ReadTotalTimeoutMultiplier  = 5;
 	CommTimeOuts.WriteTotalTimeoutConstant   = 50;
 	CommTimeOuts.WriteTotalTimeoutMultiplier = 10;
-         */
         
         if(!SetCommTimeouts(m_Handle, &CommTimeOuts)) {
  		CloseHandle(m_Handle);
@@ -119,7 +122,9 @@ void tty::Write(const vector<unsigned char>& data) {
  	if(!WriteFile(m_Handle, &data[0], (DWORD)data.size(), &feedback, 0) || feedback != (DWORD)data.size()) {
  		CloseHandle(m_Handle);
  		m_Handle = INVALID_HANDLE_VALUE;
- 		throw TTYException();
+                char errcode [30];
+                uint8_t lngth = sprintf(errcode, "Error writing to port: %05d", GetLastError());
+ 		throw TTYException( new string(errcode, lngth) );
  	}
 
  	// In some cases it's worth uncommenting
@@ -136,7 +141,7 @@ void tty::Read(vector<unsigned char>& data) {
     
 }
 
-tty::uint32_t GetStoredBaudrate() {
+uint32_t tty::GetStoredBaudrate() {
     return storedBaudrate;
 }
 

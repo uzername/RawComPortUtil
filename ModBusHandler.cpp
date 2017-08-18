@@ -7,13 +7,15 @@
 #include "ModBusHandler.h"
 
 ModBusHandler::ModBusHandler() {
-    
+    serialConnectionInstance = NULL;
 }
 
 ModBusHandler::ModBusHandler(tty* in_serialConnection) {
+    /*
     if(serialConnectionInstance != NULL) {
         serialConnectionInstance->Disconnect();
     }
+    */
     serialConnectionInstance = in_serialConnection;
 }
 
