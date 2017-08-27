@@ -9,6 +9,8 @@
 #define MODBUSHANDLER_H
 #include "tty.h"
 
+#include <windows.h>
+
 class ModBusHandler {
 public:
     ModBusHandler();
@@ -16,9 +18,14 @@ public:
     ModBusHandler(tty* in_serialConnection);
     virtual ~ModBusHandler();
     tty* serialConnectionInstance;
+    void startRS232Queries();
     
 private:
-
+    void closeThreadHandles();
+    DWORD ThreadProc(CONST LPVOID lpParam);
+    uint8_t proceedMonitoring;
+    HANDLE hMutex;
+    HANDLE hQueryThread;
 };
 
 #endif /* MODBUSHANDLER_H */
